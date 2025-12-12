@@ -84,10 +84,17 @@ const getBookings = async (user: User) => {
   let query = "SELECT * FROM bookings";
   const params: any[] = [];
 
+  // Customer → only own bookings
   if (user.role === "customer") {
     query += " WHERE customer_id = $1";
     params.push(user.id);
   }
+  // Allow admin → no filter
+  else if (user.role !== "admin") {
+    throw new Error("Unauthorized role access");
+  }
+
+  query += " ORDER BY id DESC";
 
   const result = await pool.query(query, params);
   return result.rows;

@@ -19,26 +19,28 @@ export const createBookings = async (req: Request, res: Response) => {
   }
 };
 
-export const getBookings = async (req: Request, res: Response) => {
+const getBookings = async (req: Request, res: Response) => {
   try {
     const user = (req as any).user;
+
     if (!user) {
-      return res
-        .status(401)
-        .json({ success: false, message: "User not found" });
+      return res.status(401).json({
+        success: false,
+        message: "User not authenticated",
+      });
     }
 
     const bookings = await bookingsServices.getBookings(user);
 
     return res.status(200).json({
       success: true,
+      message: "Bookings retrieved successfully",
       data: bookings,
     });
   } catch (err: any) {
-    console.error(err);
     return res.status(500).json({
       success: false,
-      message: err.message || "Failed to fetch bookings",
+      message: err.message || "Failed to retrieve bookings",
     });
   }
 };

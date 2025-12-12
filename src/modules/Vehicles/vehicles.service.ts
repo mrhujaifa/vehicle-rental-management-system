@@ -30,7 +30,7 @@ const createVehicle = async (payload: VehiclePayload) => {
     ]
   );
 
-  return result.rows[0];
+  return result;
 };
 
 const getVehicles = async () => {
